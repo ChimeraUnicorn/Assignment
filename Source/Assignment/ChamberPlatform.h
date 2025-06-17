@@ -46,11 +46,18 @@ public:
 	float FallDelay = 2.0f;
 
 	UPROPERTY(EditAnywhere, Category = "ChamberPlatform|Fall")
+	float FallResetDelay = 3.f;
+
+	UPROPERTY(EditAnywhere, Category = "ChamberPlatform|Fall")
 	float FallSpeed = 300.0f;
 
+	UPROPERTY(EditAnywhere, Category = "ChamberPlatform|Fall")
+	bool bShouldResetAfterFall = true;
+	
 	bool bPlayerIsOnPlatform = false;
 	float TimeOnPlatform = 0.0f;
 	bool bIsFalling = false;
+	FTimerHandle FallResetTimer;
 
 	// Moving Behaviour
 	UPROPERTY(EditAnywhere, Category = "ChamberPlatform|Move")
@@ -69,5 +76,8 @@ private:
 
 	UFUNCTION()
 	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+	void ResetPlatform();
 
 };

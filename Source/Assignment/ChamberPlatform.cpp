@@ -63,6 +63,13 @@ void AChamberPlatform::Tick(float DeltaTime)
 			FVector FallLocation = GetActorLocation();
 			FallLocation.Z -= FallSpeed * DeltaTime;
 			SetActorLocation(FallLocation);
+
+			if (FallLocation.Z < StartLocation.Z - 1000.f && bShouldResetAfterFall)
+			{
+				bIsFalling = false;
+
+				GetWorldTimerManager().SetTimer(FallResetTimer, this, &AChamberPlatform::ResetPlatform, FallResetDelay, false);
+			}
 		}
 	}
 }
@@ -85,5 +92,15 @@ void AChamberPlatform::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComp
 		bPlayerIsOnPlatform = false;
 		TimeOnPlatform = 0.0f;
 	}
+}
+
+void AChamberPlatform::ResetPlatform()
+{
+	SetActorLocation(StartLocation);
+	bPlayerIsOnPlatform = false;
+	TimeOnPlatform = 0.0f;
+	bIsMoving = false;
+
+	UE_LOG(LogTemp, Warning, TEXT("Platform reset"));
 }
 
