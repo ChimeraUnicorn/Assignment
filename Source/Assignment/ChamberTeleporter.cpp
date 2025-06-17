@@ -3,6 +3,7 @@
 
 #include "ChamberTeleporter.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AChamberTeleporter::AChamberTeleporter()
@@ -17,11 +18,21 @@ AChamberTeleporter::AChamberTeleporter()
 	TeleporterCollider->SetupAttachment(TeleporterBase);
 }
 
+void AChamberTeleporter::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UGameplayStatics::OpenLevel(GetWorld(), LevelToLoad);
+}
+
 // Called when the game starts or when spawned
 void AChamberTeleporter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (IsValid(TeleporterCollider))
+	{
+		TeleporterCollider->OnComponentBeginOverlap.AddDynamic(this, &AChamberTeleporter::OnComponentBeginOverlap);
+	}
 }
 
 // Called every frame
