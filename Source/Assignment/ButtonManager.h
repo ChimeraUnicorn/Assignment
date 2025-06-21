@@ -8,6 +8,14 @@
 
 class AChamberDoor;
 class AChamberButton;
+
+UENUM(BlueprintType)
+enum class EManagerMode : uint8
+{
+	Buttons UMETA(DisplayName="Buttons"),
+	PressurePlates UMETA(DisplayName="Pressure Plates"),
+};
+
 UCLASS()
 class ASSIGNMENT_API AButtonManager : public AActor
 {
@@ -29,6 +37,17 @@ public:
 	UFUNCTION()
 	void NotifyButtonPressed(int32 ButtonID);
 
+	// Called when a pressure plate is pressed
+	UFUNCTION()
+	void NotifyPlatePressed(int32 PlateID);
+
+	// Called when a pressure plate is released
+	UFUNCTION()
+	void NotifyPlateReleased(int32 PlateID);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EManagerMode ManagerMode = EManagerMode::Buttons; 
+	
 	// Assign the correct sequence in the editor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<int32> CorrectSequence;
@@ -39,6 +58,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<AChamberButton*> Buttons;
+
+	
 	
 	// Door to open set in editor
 	UPROPERTY(EditAnywhere, BlueprintReadonly)
@@ -46,7 +67,10 @@ public:
 
 	UPROPERTY(BlueprintReadonly)
 	AChamberButton* ResetButtons = nullptr;
+
 	
 private:
 	void ResetSequence();
+
+	TSet<int32> PressedPlates;
 };

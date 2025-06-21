@@ -68,6 +68,42 @@ void AButtonManager::NotifyButtonPressed(int32 ButtonID)
 	}
 }
 
+void AButtonManager::NotifyPlatePressed(int32 PlateID)
+{
+	if (ManagerMode != EManagerMode::PressurePlates)
+	{
+		return;
+	}
+
+	PressedPlates.Add(PlateID);
+
+	bool bAllDown = true;
+	for (int32 ID : CorrectSequence)
+	{
+		if (!PressedPlates.Contains(ID))
+		{
+			bAllDown = false;
+			break;
+		}
+	}
+
+	if (bAllDown && DoorToOpen)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("All plates pressed, Opening door."));
+		DoorToOpen->bShouldOpen = true;
+	}
+}
+
+void AButtonManager::NotifyPlateReleased(int32 PlateID)
+{
+	if (ManagerMode != EManagerMode::PressurePlates)
+	{
+		return;
+	}
+
+	PressedPlates.Remove(PlateID);
+}
+
 void AButtonManager::ResetSequence()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Resetting Sequence."));
