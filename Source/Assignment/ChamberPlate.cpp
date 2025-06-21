@@ -8,9 +8,12 @@ AChamberPlate::AChamberPlate()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	PlateMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlateMesh"));
-	RootComponent = PlateMesh;
+	FrameMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrameMesh"));
+	RootComponent = FrameMesh;
 
+	PlateMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlateMesh"));
+	PlateMesh->SetupAttachment(FrameMesh);
+	
 	PlateCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("PlateCollider"));
 	PlateCollider->SetupAttachment(PlateMesh);
 }
@@ -22,12 +25,31 @@ void AChamberPlate::BeginPlay()
 	PlateCollider->OnComponentBeginOverlap.AddDynamic(this, &AChamberPlate::OnComponentBeginOverlap);
 	PlateCollider->OnComponentEndOverlap.AddDynamic(this, &AChamberPlate::OnComponentEndOverlap);
 
+	StartLocation = PlateMesh->GetRelativeLocation();
+}
+
+void AChamberPlate::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bIsPressed)
+	{
+		LerpAlpha = FMath::Clamp<float>(LerpAlpha + (InterpSpeed * DeltaTime), 0.0f, 1.0f);
+	}
+	else
+	{
+		LerpAlpha = FMath::Clamp<float>(LerpAlpha - (InterpSpeed * DeltaTime), 0.0f, 1.0f);
+	}
+
+	FVector EndLocation = FMath::Lerp(StartLocation, (StartLocation - EndOffset), LerpAlpha);
+	PlateMesh->SetRelativeLocation(EndLocation);
 }
 
 
 void AChamberPlate::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                            UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	bIsPressed = true;
 	if (SequenceManager)
 	{
 		SequenceManager->NotifyPlatePressed(PlateID);
@@ -37,6 +59,7 @@ void AChamberPlate::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompo
 void AChamberPlate::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	bIsPressed = false;
 	if (SequenceManager)
 	{
 		SequenceManager->NotifyPlateReleased(PlateID);
