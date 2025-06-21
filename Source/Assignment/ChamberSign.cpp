@@ -15,33 +15,42 @@ AChamberSign::AChamberSign()
 
 	TextComponent->SetHorizontalAlignment(EHTA_Center);
 	TextComponent->SetVerticalAlignment(EVRTA_TextCenter);
-	
+	TextComponent->SetHiddenInGame(false);
 }
 
 // Called when the game starts or when spawned
 
-
-void AChamberSign::OnConstruction(const FTransform& Transform)
+#if WITH_EDITOR
+void AChamberSign::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
-	Super::OnConstruction(Transform);
+	Super::PostEditChangeProperty(PropertyChangedEvent);
 
-	TextComponent->SetText(DisplayText);
-	TextComponent->SetWorldSize(TextSize);
+	FName PropName = (PropertyChangedEvent.Property != nullptr)
+		? PropertyChangedEvent.Property->GetFName()
+		: NAME_None;
 
-	FColor ChosenColour;
-	switch (TextColour)
+	if (PropName == GET_MEMBER_NAME_CHECKED(AChamberSign, DisplayText) || PropName == GET_MEMBER_NAME_CHECKED(AChamberSign, TextColour) || PropName == GET_MEMBER_NAME_CHECKED(AChamberSign, TextSize))
 	{
-		case ETextColour::TCO_Red:   ChosenColour  = FColor::Red; break;
-		case ETextColour::TCO_Green: ChosenColour  = FColor::Green; break;
-		case ETextColour::TCO_Blue:  ChosenColour  = FColor::Blue; break;
-		case ETextColour::TCO_Yellow: ChosenColour  = FColor::Yellow; break;
-		case ETextColour::TCO_Orange: ChosenColour  = FColor::Orange; break;
-		case ETextColour::TCO_Purple: ChosenColour  = FColor::Purple; break;
-		default: ChosenColour = FColor::White;
-	}
+		TextComponent->SetText(DisplayText);
+		TextComponent->SetWorldSize(TextSize);
 
-	TextComponent->SetTextRenderColor(ChosenColour);
+		FColor ChosenColour;
+		switch (TextColour)
+		{
+			case ETextColour::TCO_Red:   ChosenColour  = FColor::Red; break;
+			case ETextColour::TCO_Green: ChosenColour  = FColor::Green; break;
+			case ETextColour::TCO_Blue:  ChosenColour  = FColor::Blue; break;
+			case ETextColour::TCO_Yellow: ChosenColour  = FColor::Yellow; break;
+			case ETextColour::TCO_Orange: ChosenColour  = FColor::Orange; break;
+			case ETextColour::TCO_Purple: ChosenColour  = FColor::Purple; break;
+			default: ChosenColour = FColor::White;
+		}
+
+		TextComponent->SetTextRenderColor(ChosenColour);
+		TextComponent->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
+	}
 }
+#endif
 
 // Called every frame
 void AChamberSign::Tick(float DeltaTime)

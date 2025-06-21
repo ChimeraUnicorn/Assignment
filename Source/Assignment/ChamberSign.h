@@ -32,18 +32,21 @@ public:
 	UPROPERTY(VisibleAnywhere, Category="ChamberSign")
 	UTextRenderComponent* TextComponent;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ChamberSign")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ChamberSign", meta=(MultiLine = "true"))
 	FText DisplayText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ChamberSign")
-	float TextSize = 30.0f;
+	float TextSize = 100.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ChamberSign")
 	ETextColour TextColour = ETextColour::TCO_White;
 	
 protected:
 	// Called when the game starts or when spawned
-	virtual void OnConstruction(const FTransform& Transform) override;
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+
 
 public:	
 	// Called every frame
