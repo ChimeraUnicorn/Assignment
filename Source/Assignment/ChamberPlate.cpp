@@ -16,6 +16,8 @@ AChamberPlate::AChamberPlate()
 	
 	PlateCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("PlateCollider"));
 	PlateCollider->SetupAttachment(PlateMesh);
+	PlateCollider->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	PlateCollider->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
 }
 
 void AChamberPlate::BeginPlay()
