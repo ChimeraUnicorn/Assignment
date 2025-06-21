@@ -11,8 +11,8 @@ AChamberPlate::AChamberPlate()
 	PlateMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlateMesh"));
 	RootComponent = PlateMesh;
 
-	PlateMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlateMesh"));
-	PlateMesh->SetupAttachment(PlateMesh);
+	PlateCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("PlateCollider"));
+	PlateCollider->SetupAttachment(PlateMesh);
 }
 
 void AChamberPlate::BeginPlay()
