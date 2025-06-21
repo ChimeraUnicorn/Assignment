@@ -29,6 +29,9 @@ public:
 	// Sets default values for this actor's properties
 	AChamberSign();
 
+	UPROPERTY(VisibleAnywhere, Category="ChamberSign")
+	UTextRenderComponent* TextComponent;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ChamberSign")
 	FText DisplayText;
 
@@ -45,8 +48,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-private:
-	UPROPERTY(VisibleAnywhere, Category="ChamberSign")
-	UTextRenderComponent* TextComponent;
 };

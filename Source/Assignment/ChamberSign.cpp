@@ -28,17 +28,19 @@ void AChamberSign::OnConstruction(const FTransform& Transform)
 	TextComponent->SetText(DisplayText);
 	TextComponent->SetWorldSize(TextSize);
 
-	
-	switch (FColor TextColour = FColor::White)
+	FColor ChosenColour;
+	switch (TextColour)
 	{
-		case ETextColour::TCO_Red:   TextColour  = FColor::Red; break;
-		case ETextColour::TCO_Green: TextColour  = FColor::Green; break;
-		case ETextColour::TCO_Blue:  TextColour  = FColor::Blue; break;
-		case ETextColour::TCO_Yellow: TextColour  = FColor::Yellow; break;
-		case ETextColour::TCO_Orange: TextColour  = FColor::Orange; break;
-		case ETextColour::TCO_Purple: TextColour  = FColor::Purple; break;
-		default: TextColour = FColor::White;
+		case ETextColour::TCO_Red:   ChosenColour  = FColor::Red; break;
+		case ETextColour::TCO_Green: ChosenColour  = FColor::Green; break;
+		case ETextColour::TCO_Blue:  ChosenColour  = FColor::Blue; break;
+		case ETextColour::TCO_Yellow: ChosenColour  = FColor::Yellow; break;
+		case ETextColour::TCO_Orange: ChosenColour  = FColor::Orange; break;
+		case ETextColour::TCO_Purple: ChosenColour  = FColor::Purple; break;
+		default: ChosenColour = FColor::White;
 	}
+
+	TextComponent->SetTextRenderColor(ChosenColour);
 }
 
 // Called every frame
