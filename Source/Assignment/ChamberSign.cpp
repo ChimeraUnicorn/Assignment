@@ -47,7 +47,7 @@ void AChamberSign::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 		}
 
 		TextComponent->SetTextRenderColor(ChosenColour);
-		TextComponent->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
+		TextComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 	}
 }
 #endif

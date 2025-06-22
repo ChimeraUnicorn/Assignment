@@ -40,6 +40,8 @@ void AChamberBox::PickupBox()
 
 	FAttachmentTransformRules Rules(EAttachmentRule::KeepWorld, true);
 	AttachToComponent(PlayerPawn->GetRootComponent(), Rules);
+
+	SetActorRelativeRotation(FRotator::ZeroRotator);
 	SetActorRelativeLocation(HeldOffset);
 }
 

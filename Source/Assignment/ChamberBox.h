@@ -58,7 +58,7 @@ private:
 	APawn* PlayerPawn = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "ChamberBox")
-	FVector HeldOffset = FVector(50, 0, 50);
+	FVector HeldOffset = FVector(95, 0, 75);
 
 	void OnGrabPressed();
 	
